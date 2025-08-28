@@ -1,4 +1,5 @@
 .DS_Store
 /data
-/notebooks/data
+notebooks/data
 notebooks/spark-warehouse
+misc
