@@ -3,3 +3,5 @@
 notebooks/data
 notebooks/spark-warehouse
 misc
+models
+finetuned_models
