@@ -1,0 +1,87 @@
+#
+# A fatal error has been detected by the Java Runtime Environment:
+#
+#  SIGSEGV (0xb) at pc=0x0000000000000000, pid=86467, tid=220939
+#
+# JRE version: OpenJDK Runtime Environment Corretto-11.0.27.6.1 (11.0.27+6) (build 11.0.27+6-LTS)
+# Java VM: OpenJDK 64-Bit Server VM Corretto-11.0.27.6.1 (11.0.27+6-LTS, mixed mode, tiered, compressed oops, g1 gc, bsd-aarch64)
+# Problematic frame:
+# C  0x0000000000000000
+#
+# No core dump will be written. Core dumps have been disabled. To enable core dumping, try "ulimit -c unlimited" before starting Java again
+#
+# If you would like to submit a bug report, please visit:
+#   https://github.com/corretto/corretto-11/issues/
+# The crash happened outside the Java Virtual Machine in native code.
+# See problematic frame for where to report the bug.
+#
+
+---------------  S U M M A R Y ------------
+
+Command Line: -Xmx12g -XX:+UseG1GC -XX:+IgnoreUnrecognizedVMOptions --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.lang.invoke=ALL-UNNAMED --add-opens=java.base/java.lang.reflect=ALL-UNNAMED --add-opens=java.base/java.io=ALL-UNNAMED --add-opens=java.base/java.net=ALL-UNNAMED --add-opens=java.base/java.nio=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.base/java.util.concurrent=ALL-UNNAMED --add-opens=java.base/java.util.concurrent.atomic=ALL-UNNAMED --add-opens=java.base/jdk.internal.ref=ALL-UNNAMED --add-opens=java.base/sun.nio.ch=ALL-UNNAMED --add-opens=java.base/sun.nio.cs=ALL-UNNAMED --add-opens=java.base/sun.security.action=ALL-UNNAMED --add-opens=java.base/sun.util.calendar=ALL-UNNAMED --add-opens=java.security.jgss/sun.security.krb5=ALL-UNNAMED -Djdk.reflect.useDirectMethodHandle=false org.apache.spark.deploy.SparkSubmit --conf spark.executor.memory=12g --conf spark.master=local[8] --conf spark.driver.memory=12g --conf spark.kryoserializer.buffer.max=2000M --conf spark.jsl.settings.pretrained.cache_folder=./models --conf spark.app.name=Text_Classification_NLP --conf spark.sql.shuffle.partitions=16 --conf spark.default.parallelism=16 --conf spark.sql.adaptive.enabled=true --conf spark.sql.adaptive.coalescePartitions.enabled=true --conf spark.serializer=org.apache.spark.serializer.KryoSerializer --conf spark.executor.extraJavaOptions=-XX:+UseG1GC --conf spark.jars=../misc/spark-nlp-silicon-assembly-6.1.2.jar --conf spark.driver.extraJavaOptions=-XX:+UseG1GC pyspark-shell
+
+Host: Mac16,12 arm64 1 MHz, 10 cores, 16G, Darwin 24.6.0
+Time: Wed Sep  3 14:10:45 2025 GMT elapsed time: 2631.054506 seconds (0d 0h 43m 51s)
+
+---------------  T H R E A D  ---------------
+
+Current thread (0x0000000333371800):  JavaThread "Executor task launch worker for task 8.0 in stage 472.0 (TID 2412)" daemon [_thread_in_native, id=220939, stack(0x0000000318928000,0x0000000318b2b000)]
+
+Stack: [0x0000000318928000,0x0000000318b2b000],  sp=0x0000000318b28060,  free space=2048k
+Java frames: (J=compiled Java code, j=interpreted, Vv=VM code)
+J 47236  ai.onnxruntime.OrtSession.run(JJJ[Ljava/lang/String;[JJ[Ljava/lang/String;J[Lai/onnxruntime/OnnxValue;[JJ)[Z (0 bytes) @ 0x0000000117657e2c [0x0000000117657d40+0x00000000000000ec]
+J 47378 c2 ai.onnxruntime.OrtSession.run(Ljava/util/Map;Ljava/util/Set;Ljava/util/Map;Lai/onnxruntime/OrtSession$RunOptions;)Lai/onnxruntime/OrtSession$Result; (756 bytes) @ 0x0000000117beeb80 [0x0000000117bedac0+0x00000000000010c0]
+J 47475 c2 ai.onnxruntime.OrtSession.run(Ljava/util/Map;)Lai/onnxruntime/OrtSession$Result; (10 bytes) @ 0x0000000117494710 [0x00000001174946c0+0x0000000000000050]
+J 47406 c2 com.johnsnowlabs.ml.ai.Bert.tag(Lscala/collection/Seq;)Lscala/collection/Seq; (1217 bytes) @ 0x000000011839ba24 [0x0000000118399700+0x0000000000002324]
+J 47424 c2 com.johnsnowlabs.ml.ai.Bert.$anonfun$predict$1(Lcom/johnsnowlabs/ml/ai/Bert;ILscala/collection/Seq;ZLscala/collection/Seq;)Lscala/collection/Seq; (73 bytes) @ 0x0000000118969888 [0x0000000118968f80+0x0000000000000908]
+J 47471 c2 com.johnsnowlabs.ml.ai.Bert$$Lambda$6851.apply(Ljava/lang/Object;)Ljava/lang/Object; (24 bytes) @ 0x000000011895f3a4 [0x000000011895f340+0x0000000000000064]
+J 47466 c2 com.johnsnowlabs.ml.ai.Bert.predict(Lscala/collection/Seq;Lscala/collection/Seq;IIZ)Lscala/collection/Seq; (43 bytes) @ 0x0000000118960718 [0x000000011895ff80+0x0000000000000798]
+J 47413 c2 com.johnsnowlabs.nlp.HasBatchedAnnotate.processBatchRows(Lscala/collection/Seq;)Lscala/collection/Seq; (85 bytes) @ 0x00000001181cb918 [0x00000001181c9700+0x0000000000002218]
+J 47464 c2 com.johnsnowlabs.nlp.HasBatchedAnnotate$$Lambda$6767.apply(Ljava/lang/Object;)Ljava/lang/Object; (12 bytes) @ 0x0000000118962bfc [0x0000000118962b80+0x000000000000007c]
+J 13253 c2 scala.collection.Iterator$$anon$11.hasNext()Z (35 bytes) @ 0x0000000117b7935c [0x0000000117b79280+0x00000000000000dc]
+J 15598 c2 scala.collection.Iterator$$anon$10.hasNext()Z (10 bytes) @ 0x0000000117d4800c [0x0000000117d47fc0+0x000000000000004c]
+J 47520 c1 org.apache.spark.sql.catalyst.expressions.GeneratedClass$GeneratedIteratorForCodegenStage2.hashAgg_doAggregateWithKeys_0$(Lorg/apache/spark/sql/catalyst/expressions/GeneratedClass$GeneratedIteratorForCodegenStage2;)V (136 bytes) @ 0x0000000113ed5f40 [0x0000000113ed5940+0x0000000000000600]
+j  org.apache.spark.sql.catalyst.expressions.GeneratedClass$GeneratedIteratorForCodegenStage2.processNext()V+96
+J 15663 c2 org.apache.spark.sql.execution.WholeStageCodegenEvaluatorFactory$WholeStageCodegenPartitionEvaluator$$anon$1.hasNext()Z (37 bytes) @ 0x0000000117d56ae4 [0x0000000117d56a80+0x0000000000000064]
+J 27973 c2 org.apache.spark.shuffle.sort.BypassMergeSortShuffleWriter.write(Lscala/collection/Iterator;)V (504 bytes) @ 0x0000000118771c60 [0x0000000118771bc0+0x00000000000000a0]
+J 28963 c1 org.apache.spark.shuffle.ShuffleWriteProcessor.write(Lorg/apache/spark/rdd/RDD;Lorg/apache/spark/ShuffleDependency;JLorg/apache/spark/TaskContext;Lorg/apache/spark/Partition;)Lorg/apache/spark/scheduler/MapStatus; (308 bytes) @ 0x000000010fdbe7b4 [0x000000010fdbe680+0x0000000000000134]
+J 29020 c1 org.apache.spark.scheduler.ShuffleMapTask.runTask(Lorg/apache/spark/TaskContext;)Lorg/apache/spark/scheduler/MapStatus; (193 bytes) @ 0x0000000110a63018 [0x0000000110a629c0+0x0000000000000658]
+J 29394 c1 org.apache.spark.scheduler.ShuffleMapTask.runTask(Lorg/apache/spark/TaskContext;)Ljava/lang/Object; (6 bytes) @ 0x00000001117ae2bc [0x00000001117ae240+0x000000000000007c]
+J 27536 c1 org.apache.spark.TaskContext.runTaskWithListeners(Lorg/apache/spark/scheduler/Task;)Ljava/lang/Object; (74 bytes) @ 0x0000000112127400 [0x00000001121272c0+0x0000000000000140]
+J 39736 c1 org.apache.spark.scheduler.Task.run(JILorg/apache/spark/metrics/MetricsSystem;ILscala/collection/immutable/Map;Lscala/Option;)Ljava/lang/Object; (356 bytes) @ 0x00000001123ff800 [0x00000001123fce00+0x0000000000002a00]
+J 27448 c1 org.apache.spark.executor.Executor$TaskRunner.$anonfun$run$4(Lorg/apache/spark/executor/Executor$TaskRunner;Lscala/runtime/BooleanRef;)Ljava/lang/Object; (54 bytes) @ 0x0000000111aca188 [0x0000000111ac9f80+0x0000000000000208]
+J 39705 c1 org.apache.spark.executor.Executor$TaskRunner$$Lambda$1731.apply()Ljava/lang/Object; (12 bytes) @ 0x000000010ff29bec [0x000000010ff29b40+0x00000000000000ac]
+J 32301 c2 org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally(Lscala/Function0;Lscala/Function0;)Ljava/lang/Object; (211 bytes) @ 0x0000000118af7f4c [0x0000000118af7f00+0x000000000000004c]
+J 37473 c1 org.apache.spark.executor.Executor$TaskRunner.run()V (2830 bytes) @ 0x0000000113931e74 [0x000000011392da80+0x00000000000043f4]
+J 24098 c1 java.util.concurrent.ThreadPoolExecutor.runWorker(Ljava/util/concurrent/ThreadPoolExecutor$Worker;)V java.base@11.0.27 (187 bytes) @ 0x0000000112954cb0 [0x0000000112953e80+0x0000000000000e30]
+J 25135 c1 java.util.concurrent.ThreadPoolExecutor$Worker.run()V java.base@11.0.27 (9 bytes) @ 0x0000000110af11d0 [0x0000000110af1140+0x0000000000000090]
+J 23451 c1 java.lang.Thread.run()V java.base@11.0.27 (17 bytes) @ 0x00000001127e6428 [0x00000001127e62c0+0x0000000000000168]
+v  ~StubRoutines::call_stub
+
+siginfo: si_signo: 11 (SIGSEGV), si_code: 2 (SEGV_ACCERR), si_addr: 0x0000000000000000
+
+Register to memory mapping:
+
+ x0=0x00000003300ec2a0 points into unknown readable memory: 0x00000003300c56b0 | b0 56 0c 30 03 00 00 00
+ x1=0x0000000318b28060 is pointing into the stack for thread: 0x0000000333371800
+ x2=0x0000000340e47d28 points into unknown readable memory: 0x0000000000000000 | 00 00 00 00 00 00 00 00
+ x3=0x0000000318b281b0 is pointing into the stack for thread: 0x0000000333371800
+ x4=0x000000033d7e56c0 points into unknown readable memory: 0x0000000000000000 | 00 00 00 00 00 00 00 00
+ x5=0x0000000000000003 is an unknown value
+ x6=0x0000000000000064 is an unknown value
+ x7=0x0000000000000300 is an unknown value
+ x8=0x0 is NULL
+ x9=0x00063de62bb20cea is an unknown value
+x10=0x0000000df8475800 is an unknown value
+x11=0x00000000000003e8 is an unknown value
+x12=0x000000033d703f30 points into unknown readable memory: 0xd0cb15c5db16db16 | 16 db 16 db c5 15 cb d0
+x13=0x00000001000d7220 points into unknown readable memory: 0x000000033d7cd530 | 30 d5 7c 3d 03 00 00 00
+x14=0x0000000000000004 is an unknown value
+x15=0x00000000000804bb is an unknown value
+x16=0x0000000196afa00c: mach_continuous_time+0 in /usr/lib/system/libsystem_kernel.dylib at 0x0000000196af9000
+x17=0x0000000205b25be8 points into unknown readable memory: 0x0000000196afa00c | 0c a0 af 96 01 00 00 00
+x18=0x0 is NULL
+x19=0x0000000318b281b0 is pointing into the stack for thread: 0x0000000333371800
+x20=0x0000000340e47d28 points into unknown readable memory: 0x0000000000000000 | 00 00 00 00 00 00 00 00
+x21=0x00000003300ec2a0 points into unknown readable memory: 0x00000003300c56b0 | b0 56 0c 30 03 00 00 00
+x22=
