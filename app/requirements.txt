@@ -1,0 +1,5 @@
+fastapi
+uvicorn
+pyspark
+spark-nlp
+pandas
