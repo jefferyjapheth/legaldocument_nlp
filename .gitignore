@@ -5,3 +5,5 @@ notebooks/spark-warehouse
 misc
 models
 finetuned_models
+# Ignore JVM crash logs
+hs_err_pid*.log
