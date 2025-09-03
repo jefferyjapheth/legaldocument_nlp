@@ -9,17 +9,14 @@ Comparing classical ML and modern NLP approaches for legal document classificati
 - **TF-IDF + N-grams + CountVectorizer + Logistic Regression**
 - Traditional feature engineering with statistical text representation
 
-### 2. Hybrid Modern 
-- **BERT + Logistic Regression**
-- Pre-trained embeddings with classical ML classifier
-
-### 3. Full Deep Learning
-- **BERT + ClassifierDL**
+### 2. Full Deep Learning
+- **LEGALBERT + ClassifierDL**
 - End-to-end neural classification with domain-specific LegalBERT embeddings
 
-### 4. Alternative Deep Learning
-- **USE + ClassifierDL** 
-- Universal Sentence Encoder with neural classifier
+### 3. Hybrid Modern 
+- **LEGALBERT + Logistic Regression**
+- Pre-trained embeddings with classical ML classifier
+
 
 ## Evaluation Goals
 - **Performance**: Accuracy, F1-score comparison across approaches
