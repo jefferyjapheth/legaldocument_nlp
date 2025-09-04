@@ -7,3 +7,9 @@ models
 finetuned_models
 # Ignore JVM crash logs
 hs_err_pid*.log
+.vscode
+# Ignore everything in notebooks folder
+notebooks/*
+# Except .ipynb files
+!notebooks/*.ipynb
+mlruns/.trash
