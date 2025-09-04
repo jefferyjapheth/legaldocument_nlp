@@ -12,4 +12,3 @@ hs_err_pid*.log
 notebooks/*
 # Except .ipynb files
 !notebooks/*.ipynb
-mlruns/.trash
