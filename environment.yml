@@ -1,0 +1,62 @@
+name: contract-classification
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  # ------------------------
+  # Python
+  # ------------------------
+  - python=3.10
+
+  # ------------------------
+  # Core libraries
+  # ------------------------
+  - numpy=2.2.6
+  - pandas=2.3.2
+  - scipy=1.15.2
+
+  # ------------------------
+  # Spark & NLP
+  # ------------------------
+  - pyspark=3.5.6
+  - pip
+  - pip:
+      - spark-nlp==6.1.2
+
+  # ------------------------
+  # API & web
+  # ------------------------
+  - fastapi==0.116.1
+  - uvicorn==0.35.0
+  - pydantic==2.11.7
+
+  # ------------------------
+  # MLflow for experiment tracking
+  # ------------------------
+  - pip:
+      - mlflow==3.3.2
+      - jaraco-collections==5.1.0
+
+  # ------------------------
+  # PDF & OCR
+  # ------------------------
+  - pip:
+      - PyPDF2==3.0.1
+      - pdf2image==1.17.0
+      - pytesseract==0.3.13
+      - beautifulsoup4==4.13.5
+  - poppler  # system library for pdf2image
+  - tesseract  # system library for pytesseract
+
+  # ------------------------
+  # Visualization
+  # ------------------------
+  - matplotlib==3.10.5
+  - seaborn==0.13.2
+
+  # ------------------------
+  # Optional utilities
+  # ------------------------
+  - pillow
+  - requests
+  - typing-extensions
