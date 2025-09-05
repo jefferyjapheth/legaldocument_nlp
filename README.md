@@ -3,7 +3,7 @@
 ## Project Overview
 Comparing classical ML and modern NLP approaches for legal document classification using Spark NLP.
 
-## Approaches Implemented
+## Approaches Implemento
 
 ### 1. Classical ML
 - **TF-IDF + N-grams + CountVectorizer + Logistic Regression**

@@ -12,3 +12,9 @@ hs_err_pid*.log
 notebooks/*
 # Except .ipynb files
 !notebooks/*.ipynb
+# MLflow runs and model artifacts
+mlruns/
+finetuned_models/
+app/models/lr_model/
+app/models/classical_nlp_pipeline/
+app/models/feature_pipeline/
