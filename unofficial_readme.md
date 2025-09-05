@@ -197,4 +197,7 @@ Why these struggle:
 ---
 
 **Summary:**
-TF-IDF + LR with fallback delivers **production-grade contract classification**, balancing **accuracy, efficiency, and minority-class handling**. LegalBERT embeddings promise deeper semantic understanding but require trade-offs in **compute and training time**. Both approaches are fully tracked, versioned, and deployable, offering robust solutions for automated contract analysis
+The project demonstrates a **production-ready contract type classification pipeline**. TF-IDF with fallback proved most reliable across all contract types, while LegalBERT embeddings provide promising domain-specific insights. Both approaches are fully tracked, versioned, and deployable, offering robust solutions for automated contract analysis.
+
+**Summary:**
+TF-IDF + LR with fallback delivers **production-grade contract classification**, balancing **accuracy, efficiency, and minority-class handling**. LegalBERT embeddings provide deeper semantic understanding but require trade-offs in **compute and training time**. Both approaches are fully tracked, versioned, and deployable.

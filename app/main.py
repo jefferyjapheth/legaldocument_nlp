@@ -8,6 +8,7 @@ import sparknlp
 from pyspark.ml import PipelineModel
 from io import BytesIO
 import PyPDF2
+from bs4 import BeautifulSoup
 
 # --------- Initialize FastAPI ---------
 app = FastAPI(
@@ -44,13 +45,10 @@ class PredictRequest(BaseModel):
 # --------- Helper: Run prediction ---------
 def run_prediction(text: str):
     # Convert input into Spark DataFrame
-    # NOTE: Pipeline expects "description"
     data = spark.createDataFrame([[text]]).toDF("description")
 
     # Run through pipeline
     predictions = full_pipeline.transform(data)
-    print("the prediction", predictions)
-    predictions.show()
 
     # Extract prediction and probability
     result = predictions.collect()[0]
@@ -87,16 +85,32 @@ def predict(request: PredictRequest):
     return run_prediction(request.text)
 
 
-@app.post("/predict-pdf", summary="Predict from PDF upload")
-def predict_pdf(file: UploadFile = File(..., description="Upload a PDF contract")):
+@app.post("/predict-file", summary="Predict from file upload (PDF, TXT, HTML)")
+def predict_file(file: UploadFile = File(..., description="Upload a PDF, TXT, or HTML file")):
     """
-    Upload a PDF contract. The text will be extracted and classified.
+    Upload a contract in PDF, TXT, or HTML format. 
+    The text will be extracted and classified.
     """
     try:
-        pdf_reader = PyPDF2.PdfReader(BytesIO(file.file.read()))
-        text = " ".join([page.extract_text() for page in pdf_reader.pages if page.extract_text()])
+        ext = os.path.splitext(file.filename)[1].lower()
+
+        if ext == ".pdf":
+            pdf_reader = PyPDF2.PdfReader(BytesIO(file.file.read()))
+            text = " ".join([page.extract_text() for page in pdf_reader.pages if page.extract_text()])
+        elif ext == ".txt":
+            text = file.file.read().decode("utf-8")
+        elif ext in [".html", ".htm"]:
+            html_content = file.file.read().decode("utf-8")
+            soup = BeautifulSoup(html_content, "html.parser")
+            text = soup.get_text(separator=" ", strip=True)
+        else:
+            return JSONResponse(status_code=400, content={"error": f"Unsupported file type: {ext}"})
+
+        if not text.strip():
+            return JSONResponse(status_code=400, content={"error": "No extractable text found in file."})
+
     except Exception as e:
-        return JSONResponse(status_code=400, content={"error": f"Failed to read PDF: {str(e)}"})
+        return JSONResponse(status_code=400, content={"error": f"Failed to process file: {str(e)}"})
 
     return run_prediction(text)
 
@@ -109,7 +123,7 @@ def model_info():
     }
 
 
-# --------- Custom OpenAPI (adds example for PDF upload) ---------
+# --------- Custom OpenAPI (adds examples for file upload) ---------
 def custom_openapi():
     if app.openapi_schema:
         return app.openapi_schema
@@ -120,9 +134,9 @@ def custom_openapi():
         routes=app.routes,
     )
 
-    # Add PDF upload example
-    if "/predict-pdf" in openapi_schema["paths"]:
-        openapi_schema["paths"]["/predict-pdf"]["post"]["requestBody"] = {
+    # Update /predict-file requestBody
+    if "/predict-file" in openapi_schema["paths"]:
+        openapi_schema["paths"]["/predict-file"]["post"]["requestBody"] = {
             "content": {
                 "multipart/form-data": {
                     "schema": {
@@ -131,16 +145,26 @@ def custom_openapi():
                             "file": {
                                 "type": "string",
                                 "format": "binary",
-                                "description": "Upload a PDF file"
+                                "description": "Upload a contract (PDF, TXT, HTML)"
                             }
                         }
                     },
                     "examples": {
                         "samplePDF": {
-                            "summary": "Sample contract PDF",
-                            "description": "Upload a sample employment agreement PDF",
+                            "summary": "Sample PDF contract",
+                            "description": "Upload a sample employment agreement in PDF format",
                             "value": {"file": "sample_contract.pdf"}
-                        }
+                        },
+                        "sampleTXT": {
+                            "summary": "Sample TXT contract",
+                            "description": "Upload a plain text contract",
+                            "value": {"file": "sample_contract.txt"}
+                        },
+                        "sampleHTML": {
+                            "summary": "Sample HTML contract",
+                            "description": "Upload a contract embedded in HTML",
+                            "value": {"file": "sample_contract.html"}
+                        },
                     }
                 }
             },
@@ -149,6 +173,3 @@ def custom_openapi():
 
     app.openapi_schema = openapi_schema
     return app.openapi_schema
-
-
-app.openapi = custom_openapi
