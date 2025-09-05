@@ -113,7 +113,7 @@ Two variants tested:
 
 From the TF-IDF report:
 
-* **Class “7.0”** has the **lowest F1 (\~0.47)**. If that’s your **NA/Other** bucket, it’s expected: it’s **heterogeneous**, lacks consistent keywords, and overlaps lexically with everything else.
+* **Class “7.0”** has the **lowest F1 (\~0.47)**. Since that’s the **NA/Other** bucket, it’s expected: it’s **heterogeneous**, lacks consistent keywords, and overlaps lexically with everything else.
 * The next weakest appears around **0.77–0.82 F1** (e.g., the class with F1≈0.819). In contract taxonomies, this is typically **services & supply** or similar—broad, overlapping vocabulary (“service”, “agreement”, “supplier”, “term”) that also appears in **employment** or **purchase & M\&A** templates.
 
 Why these struggle:
