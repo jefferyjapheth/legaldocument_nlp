@@ -18,4 +18,6 @@ finetuned_models/
 app/models/lr_model/
 app/models/classical_nlp_pipeline/
 app/models/feature_pipeline/
-app/__pycache__
+app/__pycache__mlruns/
+*.onnx
+**/bert_onnx
