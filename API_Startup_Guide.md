@@ -73,6 +73,7 @@ project/
 ---
 
 ## 4. Running the API Server
+* Run this command from the root of the project dir
 
 ```bash
 uvicorn app.main:app --reload
