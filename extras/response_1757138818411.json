@@ -1,0 +1,325 @@
+{
+  "predicted_type": "shareholder",
+  "confidence": 0.5807896873301043,
+  "top3_predictions": [
+    {
+      "label": "shareholder",
+      "probability": 0.5807896873301043
+    },
+    {
+      "label": "na",
+      "probability": 0.15554147948832903
+    },
+    {
+      "label": "security",
+      "probability": 0.14916909562740963
+    }
+  ],
+  "probabilities": {
+    "security": 0.14916909562740963,
+    "employment": 0.00001461178959034475,
+    "lease": 4.775869806800632e-10,
+    "services&supply": 0.0025565337720331914,
+    "purchase&ma": 0.0007090921749744961,
+    "shareholder": 0.5807896873301043,
+    "other": 0.11121949933997202,
+    "na": 0.15554147948832903
+  },
+  "document_length": 53883,
+  "num_chunks": 18,
+  "fallback_chunks": [
+    11,
+    15,
+    17
+  ],
+  "chunk_details": [
+    {
+      "chunk_index": 0,
+      "text_snippet": "EX-10.1 2 d421338dex101.htm EX-10.1 EX-10.1 Exhibit 10.1 Execution Version REGISTRATION RIGHTS AGREEMENT This REGISTRATION RIGHTS AGREEMENT (this “ Agreement ”) is made and entered into as of June 28,...",
+      "predicted_label": "security",
+      "confidence": 0.999999920740653,
+      "probabilities": {
+        "security": 0.999999920740653,
+        "employment": 9.678679492971737e-19,
+        "lease": 5.233550868224418e-24,
+        "services&supply": 8.029183706614784e-25,
+        "purchase&ma": 4.656158749318595e-11,
+        "shareholder": 7.909075962690784e-8,
+        "other": 2.8353753546806207e-20,
+        "na": 1.2202570074837436e-10
+      }
+    },
+    {
+      "chunk_index": 1,
+      "text_snippet": "ments set forth herein and for good and valuable consideration, the receipt and sufficiency of which are hereby acknowledged, the parties to this Agreement hereby agree as follows: 1. Definitions; Con...",
+      "predicted_label": "security",
+      "confidence": 0.9992046370357563,
+      "probabilities": {
+        "security": 0.9992046370357563,
+        "employment": 9.310692302882045e-8,
+        "lease": 5.697373102054125e-16,
+        "services&supply": 7.772776321855853e-14,
+        "purchase&ma": 1.3833712616113786e-17,
+        "shareholder": 0.0007701977440575363,
+        "other": 1.878555719434595e-12,
+        "na": 0.0000250721113060578
+      }
+    },
+    {
+      "chunk_index": 2,
+      "text_snippet": "ticular Person, any state, county, city and political subdivision of the United States in which such Person or such Person’s property is located or which exercises valid jurisdiction over any such Per...",
+      "predicted_label": "shareholder",
+      "confidence": 0.9999999996571112,
+      "probabilities": {
+        "security": 3.3484290104907336e-10,
+        "employment": 8.335742746095414e-20,
+        "lease": 4.027353762640584e-20,
+        "services&supply": 4.1608673324193755e-17,
+        "purchase&ma": 4.927480300842119e-19,
+        "shareholder": 0.9999999996571112,
+        "other": 5.665339268018645e-15,
+        "na": 8.040047638910893e-12
+      }
+    },
+    {
+      "chunk_index": 3,
+      "text_snippet": " be incorporated by reference in such Prospectus. “ Purchase Agreement ” shall have the meaning set forth in the recitals to this Agreement. “ Purchaser ” shall have the meaning set forth in the pream...",
+      "predicted_label": "security",
+      "confidence": 0.6650339965395959,
+      "probabilities": {
+        "security": 0.6650339965395959,
+        "employment": 1.312417135103518e-15,
+        "lease": 5.84957327796112e-16,
+        "services&supply": 3.6042389310304345e-13,
+        "purchase&ma": 1.0816738615838632e-13,
+        "shareholder": 0.33496548920959757,
+        "other": 1.2522577184051762e-16,
+        "na": 5.14250335901243e-7
+      }
+    },
+    {
+      "chunk_index": 4,
+      "text_snippet": " time to time, or any similar rule or regulation hereafter adopted by the SEC having substantially the same effect as such Rule. “ SEC ” shall mean the Securities and Exchange SEC or any other federal...",
+      "predicted_label": "shareholder",
+      "confidence": 0.9932695952932937,
+      "probabilities": {
+        "security": 0.006610719959129125,
+        "employment": 1.8124598222134068e-13,
+        "lease": 3.002039800870958e-15,
+        "services&supply": 4.25433277236556e-12,
+        "purchase&ma": 1.197057939306227e-12,
+        "shareholder": 0.9932695952932937,
+        "other": 1.994421367841148e-12,
+        "na": 0.00011968473994712927
+      }
+    },
+    {
+      "chunk_index": 5,
+      "text_snippet": "ended method or methods of distribution specified in the Demand Notice, which may include sales on a delayed or continuous basis pursuant to Rule 415 (a “ Demand Registration ”). (ii) Subject to the r...",
+      "predicted_label": "shareholder",
+      "confidence": 0.9999923861495388,
+      "probabilities": {
+        "security": 7.126729212878423e-11,
+        "employment": 4.1773375224044287e-16,
+        "lease": 1.3893220318457394e-20,
+        "services&supply": 1.443126412487057e-19,
+        "purchase&ma": 1.909012214810074e-16,
+        "shareholder": 0.9999923861495388,
+        "other": 1.2269187472450264e-17,
+        "na": 0.000007613779193153144
+      }
+    },
+    {
+      "chunk_index": 6,
+      "text_snippet": "tained in this Agreement, the Corporation shall effect any Demand Registration on Form S-3 (unless the Corporation is not then eligible to register for resale the Registrable Securities on Form S-3, i...",
+      "predicted_label": "shareholder",
+      "confidence": 0.9999999206880884,
+      "probabilities": {
+        "security": 8.159179151092681e-9,
+        "employment": 6.936832802476663e-10,
+        "lease": 2.804270671893134e-20,
+        "services&supply": 1.7819340708284067e-22,
+        "purchase&ma": 1.90585758614747e-26,
+        "shareholder": 0.9999999206880884,
+        "other": 4.140528176895721e-20,
+        "na": 7.045904918751208e-8
+      }
+    },
+    {
+      "chunk_index": 7,
+      "text_snippet": "er than holders of Registrable Securities, allocated among such holders on a pro rata basis. (iii) The Corporation shall have the right to terminate or withdraw any registration initiated by it under ...",
+      "predicted_label": "shareholder",
+      "confidence": 1,
+      "probabilities": {
+        "security": 1.0328662667628984e-24,
+        "employment": 7.82976325135386e-31,
+        "lease": 7.143266712388017e-32,
+        "services&supply": 3.62298457745973e-30,
+        "purchase&ma": 9.235595289665353e-33,
+        "shareholder": 1,
+        "other": 3.4625591545814824e-27,
+        "na": 5.2281670632808434e-24
+      }
+    },
+    {
+      "chunk_index": 8,
+      "text_snippet": "supplements that do not materially alter the previous disclosure or do nothing more than name Holders and provide information with respect thereto, and except for any filing made under the Exchange Ac...",
+      "predicted_label": "shareholder",
+      "confidence": 1,
+      "probabilities": {
+        "security": 1.5206487822754554e-18,
+        "employment": 1.1032429255283033e-31,
+        "lease": 5.487219542358943e-29,
+        "services&supply": 6.381820570569212e-30,
+        "purchase&ma": 1.0425839354957987e-30,
+        "shareholder": 1,
+        "other": 5.688750951482118e-29,
+        "na": 3.3600132279778166e-22
+      }
+    },
+    {
+      "chunk_index": 9,
+      "text_snippet": "se; (iv) of the receipt by the Corporation of any notification with respect to the suspension of the qualification or exemption from qualification of any of the Registrable Securities for sale in any ...",
+      "predicted_label": "shareholder",
+      "confidence": 0.9999977488354346,
+      "probabilities": {
+        "security": 3.070285556819505e-11,
+        "employment": 4.044616813571793e-18,
+        "lease": 5.755044012339752e-18,
+        "services&supply": 4.858181391616702e-18,
+        "purchase&ma": 9.919553669128422e-18,
+        "shareholder": 0.9999977488354346,
+        "other": 2.1942907306794706e-11,
+        "na": 0.000002251111919671604
+      }
+    },
+    {
+      "chunk_index": 10,
+      "text_snippet": "use and each amendment or supplement thereto as such Holder may reasonably request during the Effectiveness Period. Subject to the terms of this Agreement, including Section 7(b) , the Corporation con...",
+      "predicted_label": "shareholder",
+      "confidence": 0.999917897003845,
+      "probabilities": {
+        "security": 0.00008140782385510259,
+        "employment": 1.0434311998120555e-20,
+        "lease": 1.3482298644445727e-20,
+        "services&supply": 2.4914231871840973e-18,
+        "purchase&ma": 4.407759402262467e-16,
+        "shareholder": 0.999917897003845,
+        "other": 9.752751057446236e-17,
+        "na": 6.951722994191888e-7
+      }
+    },
+    {
+      "chunk_index": 11,
+      "text_snippet": "ser in connection with the transactions contemplated by this Agreement and Purchaser agrees to maintain the confidentiality of any such information. The Corporation acknowledges and agrees that since ...",
+      "predicted_label": "na",
+      "confidence": 0.8441565110534497,
+      "probabilities": {
+        "security": 2.4085673241173337e-10,
+        "employment": 8.999817809842499e-11,
+        "lease": 3.8504969682330934e-14,
+        "services&supply": 0.04554731388216276,
+        "purchase&ma": 9.66566233593186e-13,
+        "shareholder": 0.11019371664507857,
+        "other": 0.00010245808744888854,
+        "na": 0.8441565110534497
+      }
+    },
+    {
+      "chunk_index": 12,
+      "text_snippet": "Holder Indemnified Person may be involved, or is threatened to be involved, as a party or otherwise, under the Securities Act (collectively, “ Losses ”), as incurred, arising out of or relating to any...",
+      "predicted_label": "shareholder",
+      "confidence": 0.9999999998651121,
+      "probabilities": {
+        "security": 6.602324956068551e-11,
+        "employment": 2.0836760072465917e-16,
+        "lease": 6.723509533875868e-21,
+        "services&supply": 1.4898898733493173e-15,
+        "purchase&ma": 7.774654344249565e-20,
+        "shareholder": 0.9999999998651121,
+        "other": 1.6111736520891452e-11,
+        "na": 5.2751088539251895e-11
+      }
+    },
+    {
+      "chunk_index": 13,
+      "text_snippet": "made therein, in the light of the circumstances in which they were made, not misleading, but in each case only to the extent that the same are made in reliance and in conformity with information relat...",
+      "predicted_label": "other",
+      "confidence": 0.9999999999997853,
+      "probabilities": {
+        "security": 4.7131300803442184e-21,
+        "employment": 5.610339830957284e-21,
+        "lease": 2.0675469337027356e-20,
+        "services&supply": 2.7349155530026057e-17,
+        "purchase&ma": 3.042879533744076e-20,
+        "shareholder": 6.955002214031062e-20,
+        "other": 0.9999999999997853,
+        "na": 2.1464277525926826e-13
+      }
+    },
+    {
+      "chunk_index": 14,
+      "text_snippet": "hose available to another indemnified party with respect to such claim. For the avoidance of doubt, notwithstanding any assumption by an indemnifying party of the defense of a claim hereunder, the ind...",
+      "predicted_label": "shareholder",
+      "confidence": 0.9965067494727596,
+      "probabilities": {
+        "security": 5.057406034872508e-11,
+        "employment": 5.2967999397626106e-12,
+        "lease": 8.94926618484779e-17,
+        "services&supply": 5.275925082805213e-13,
+        "purchase&ma": 2.943618682835932e-14,
+        "shareholder": 0.9965067494727596,
+        "other": 0.0017802341740484687,
+        "na": 0.0017130162967637621
+      }
+    },
+    {
+      "chunk_index": 15,
+      "text_snippet": "spectus or Registration Statement (a “ Suspension Period ”). The Corporation may provide appropriate stop orders to enforce the provisions of this Section 7 (b) . The Corporation shall use reasonable ...",
+      "predicted_label": "na",
+      "confidence": 0.967284833392204,
+      "probabilities": {
+        "security": 0.01411297908033018,
+        "employment": 2.5227981112312552e-11,
+        "lease": 8.212496576972981e-9,
+        "services&supply": 0.0000022613756116790754,
+        "purchase&ma": 1.7826169370821606e-8,
+        "shareholder": 0.018599885116754575,
+        "other": 1.497120569343458e-8,
+        "na": 0.967284833392204
+      }
+    },
+    {
+      "chunk_index": 16,
+      "text_snippet": "thout the consent of the Corporation and Holders that hold a majority of the Registrable Securities as of the date of such assignment, and any assignment in violation of the foregoing shall be void; p...",
+      "predicted_label": "other",
+      "confidence": 0.9999655136397193,
+      "probabilities": {
+        "security": 1.0520367402113236e-10,
+        "employment": 3.1494735089130036e-14,
+        "lease": 1.0192387065634199e-16,
+        "services&supply": 1.03111864384069e-9,
+        "purchase&ma": 6.9738966043463835e-9,
+        "shareholder": 1.3159401184514063e-8,
+        "other": 0.9999655136397193,
+        "na": 0.00003446509062891497
+      }
+    },
+    {
+      "chunk_index": 17,
+      "text_snippet": "T, TORT, EQUITY OR OTHERWISE. THE PARTIES TO THIS AGREEMENT EACH HEREBY AGREES AND CONSENTS THAT ANY SUCH CLAIM, DEMAND, ACTION OR CAUSE OF ACTION SHALL BE DECIDED BY COURT TRIAL WITHOUT A JURY AND TH...",
+      "predicted_label": "na",
+      "confidence": 0.9864019031497937,
+      "probabilities": {
+        "security": 5.105540405385162e-8,
+        "employment": 0.00026291829128225294,
+        "lease": 3.8402621626936274e-10,
+        "services&supply": 0.00046803160248272234,
+        "purchase&ma": 0.012763634300611483,
+        "shareholder": 6.940110442672486e-7,
+        "other": 0.00010276720535532122,
+        "na": 0.9864019031497937
+      }
+    }
+  ]
+}

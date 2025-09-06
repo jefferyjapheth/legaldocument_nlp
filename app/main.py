@@ -1,4 +1,5 @@
-from fastapi import FastAPI, UploadFile, File
+import logging
+from fastapi import FastAPI, UploadFile, File, HTTPException
 from fastapi.responses import JSONResponse
 from fastapi.openapi.utils import get_openapi
 from pydantic import BaseModel, Field
@@ -13,27 +14,48 @@ from typing import List
 from pdf2image import convert_from_bytes
 import pytesseract
 
+# --------- Configure Logging ---------
+# Logs include timestamp, log level, logger name, and message
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(name)s - %(message)s"
+)
+logger = logging.getLogger("contract-classifier")
+
 # --------- Initialize FastAPI ---------
 app = FastAPI(
     title="Contract Classification API",
-    description="API for classifying contract text using Spark NLP + Logistic Regression with fallback and OCR handling",
-    version="1.3.0",
+    description="API for classifying contract text using Spark NLP + Logistic Regression with fallback, OCR, explainability, and logging",
+    version="1.5.0",
 )
 
 # --------- Load Spark NLP & Models ---------
-spark = sparknlp.start()
+try:
+    spark = sparknlp.start()
+    logger.info("Spark NLP session started successfully.")
+except Exception as e:
+    logger.exception("Failed to start Spark NLP session.")
+    raise RuntimeError("Spark NLP initialization failed.") from e
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 MODEL_DIR = os.path.join(BASE_DIR, "models")
 FULL_PIPELINE_PATH = os.path.join(MODEL_DIR, "full_pipeline")
 LABEL_MAPPING_PATH = os.path.join(MODEL_DIR, "label_mappings.json")
 
-# Load trained pipeline
-full_pipeline = PipelineModel.load(FULL_PIPELINE_PATH)
+try:
+    full_pipeline = PipelineModel.load(FULL_PIPELINE_PATH)
+    logger.info(f"Loaded Spark NLP pipeline from {FULL_PIPELINE_PATH}")
+except Exception as e:
+    logger.exception("Failed to load trained Spark NLP pipeline.")
+    raise RuntimeError("Pipeline loading failed.") from e
 
-# Load label mappings
-with open(LABEL_MAPPING_PATH, "r") as f:
-    label_mappings = json.load(f)
+try:
+    with open(LABEL_MAPPING_PATH, "r") as f:
+        label_mappings = json.load(f)
+    logger.info("Loaded label mappings.")
+except Exception as e:
+    logger.exception("Failed to load label mappings.")
+    raise RuntimeError("Label mappings loading failed.") from e
 
 # --------- Fallback Configuration ---------
 FALLBACK_LABEL = "na"
@@ -52,10 +74,9 @@ class PredictRequest(BaseModel):
     )
 
 # --------- Fallback Logic ---------
-def apply_fallback_api(prediction_probs: List[float], predicted_idx: int) -> (str, float):
+def apply_fallback_api(prediction_probs: list[float], predicted_idx: int) -> tuple[str, float]:
     """
-    Apply fallback logic to a single prediction.
-    Returns label and confidence.
+    Apply fallback logic when confidence is low or class is ambiguous.
     """
     sorted_probs = sorted(prediction_probs)
     top1_prob = sorted_probs[-1]
@@ -65,79 +86,106 @@ def apply_fallback_api(prediction_probs: List[float], predicted_idx: int) -> (st
     if (predicted_idx in AMBIG_CLASSES and (top1_prob < CONF_THRESHOLD_AMBIG or margin < MARGIN_AMBIG)) \
         or (predicted_idx not in AMBIG_CLASSES and (top1_prob < CONF_THRESHOLD_OTHERS or margin < MARGIN_OTHERS)):
         fallback_conf = max(prediction_probs)
+        logger.warning(f"Fallback applied for index={predicted_idx}, probs={prediction_probs}")
         return FALLBACK_LABEL, fallback_conf
     else:
         return label_mappings[str(predicted_idx)], top1_prob
 
-# --------- Run Prediction with Chunking & Logging ---------
+# --------- Run Prediction ---------
 def run_prediction(text: str, chunk_size: int = CHUNK_SIZE) -> dict:
     """
-    Process text: split into chunks, run through Spark NLP pipeline,
-    apply fallback logic, and return top prediction, top-3 probabilities,
-    chunk info, and fallback triggers.
+    Splits text into chunks, runs classification with Spark NLP,
+    aggregates results, and logs structured request/response info.
     """
-    text = " ".join(text.split())
-    doc_len = len(text)
-    chunks = [text[i:i + chunk_size] for i in range(0, len(text), chunk_size)]
-    num_chunks = len(chunks)
-    agg_probs = [0.0] * len(label_mappings)
-    fallback_chunks = []
+    try:
+        # Normalize text and split into chunks
+        text = " ".join(text.split())
+        doc_len = len(text)
+        chunks = [text[i:i + chunk_size] for i in range(0, len(text), chunk_size)]
+        num_chunks = len(chunks)
+        agg_probs = [0.0] * len(label_mappings)
+        fallback_chunks = []
+        chunk_details = []
 
-    # Process each chunk
-    for idx, chunk in enumerate(chunks):
-        df_chunk = spark.createDataFrame([[chunk]]).toDF("description")
-        pred = full_pipeline.transform(df_chunk).collect()[0]
+        logger.info(f"Running prediction: doc_length={doc_len}, num_chunks={num_chunks}")
 
-        chunk_probs = [float(p) for p in pred.probability]
-        top_idx = chunk_probs.index(max(chunk_probs))
-        top_label, top_conf = apply_fallback_api(chunk_probs, top_idx)
+        # Process each chunk separately
+        for idx, chunk in enumerate(chunks):
+            df_chunk = spark.createDataFrame([[chunk]]).toDF("description")
+            pred = full_pipeline.transform(df_chunk).collect()[0]
 
-        if top_label == FALLBACK_LABEL:
-            fallback_chunks.append(idx)
+            chunk_probs = [float(p) for p in pred.probability]
+            top_idx = chunk_probs.index(max(chunk_probs))
+            top_label, top_conf = apply_fallback_api(chunk_probs, top_idx)
 
-        # Aggregate probabilities across chunks
-        agg_probs = [agg_probs[i] + chunk_probs[i] for i in range(len(agg_probs))]
+            if top_label == FALLBACK_LABEL:
+                fallback_chunks.append(idx)
 
-    # Average probabilities
-    agg_probs = [p / num_chunks for p in agg_probs]
-    top_idx = agg_probs.index(max(agg_probs))
-    top_label, top_conf = apply_fallback_api(agg_probs, top_idx)
+            # Aggregate probabilities
+            agg_probs = [agg_probs[i] + chunk_probs[i] for i in range(len(agg_probs))]
 
-    # Top 3 predictions
-    top3 = sorted(
-        [(label_mappings[str(i)], p) for i, p in enumerate(agg_probs)],
-        key=lambda x: x[1], reverse=True
-    )[:3]
+            # Save chunk-level explainability
+            chunk_details.append({
+                "chunk_index": idx,
+                "text_snippet": chunk[:200] + ("..." if len(chunk) > 200 else ""),
+                "predicted_label": top_label,
+                "confidence": top_conf,
+                "probabilities": {label_mappings[str(i)]: p for i, p in enumerate(chunk_probs)}
+            })
 
-    return {
-        "predicted_type": top_label,
-        "confidence": top_conf,
-        "top3_predictions": [{"label": label, "probability": prob} for label, prob in top3],
-        "probabilities": {label_mappings[str(i)]: p for i, p in enumerate(agg_probs)},
-        "document_length": doc_len,
-        "num_chunks": num_chunks,
-        "fallback_chunks": fallback_chunks,
-    }
+        # Average probabilities across chunks
+        agg_probs = [p / num_chunks for p in agg_probs]
+        top_idx = agg_probs.index(max(agg_probs))
+        top_label, top_conf = apply_fallback_api(agg_probs, top_idx)
+
+        # Get top-3 predictions
+        top3 = sorted(
+            [(label_mappings[str(i)], p) for i, p in enumerate(agg_probs)],
+            key=lambda x: x[1], reverse=True
+        )[:3]
+
+        result = {
+            "predicted_type": top_label,
+            "confidence": top_conf,
+            "top3_predictions": [{"label": label, "probability": prob} for label, prob in top3],
+            "probabilities": {label_mappings[str(i)]: p for i, p in enumerate(agg_probs)},
+            "document_length": doc_len,
+            "num_chunks": num_chunks,
+            "fallback_chunks": fallback_chunks,
+            "chunk_details": chunk_details
+        }
+
+        # Log structured response summary
+        logger.info(f"Prediction completed: label={top_label}, confidence={top_conf:.2f}, doc_length={doc_len}")
+
+        return result
+    except Exception:
+        logger.exception("Error during prediction.")
+        raise
 
 # --------- OCR for PDFs ---------
 def extract_text_from_pdf(file_bytes: bytes) -> str:
     """
-    Extract text from PDF using PyPDF2 first, then fall back to OCR if needed.
+    Extracts text from PDF using PyPDF2. Falls back to OCR if needed.
     """
-    text = ""
-    pdf_reader = PyPDF2.PdfReader(BytesIO(file_bytes))
-    for page in pdf_reader.pages:
-        page_text = page.extract_text()
-        if page_text:
-            text += page_text + " "
+    try:
+        text = ""
+        pdf_reader = PyPDF2.PdfReader(BytesIO(file_bytes))
+        for page in pdf_reader.pages:
+            page_text = page.extract_text()
+            if page_text:
+                text += page_text + " "
 
-    # If no text extracted, apply OCR
-    if not text.strip():
-        images = convert_from_bytes(file_bytes)
-        for img in images:
-            text += pytesseract.image_to_string(img) + " "
+        if not text.strip():
+            logger.info("No text found in PDF, falling back to OCR.")
+            images = convert_from_bytes(file_bytes)
+            for img in images:
+                text += pytesseract.image_to_string(img) + " "
 
-    return text.strip()
+        return text.strip()
+    except Exception :
+        logger.exception("Failed to extract text from PDF.")
+        raise
 
 # --------- Endpoints ---------
 @app.get("/")
@@ -151,17 +199,24 @@ def health_check():
 @app.post("/predict", response_model=dict, summary="Predict from raw text")
 def predict(request: PredictRequest):
     """
-    Predict contract type from raw text input.
+    Endpoint for raw text classification with logging.
     """
-    return run_prediction(request.text)
+    try:
+        logger.info(f"/predict request received: text_length={len(request.text)}")
+        result = run_prediction(request.text)
+        logger.info(f"/predict response: predicted_type={result['predicted_type']}, confidence={result['confidence']:.2f}")
+        return result
+    except Exception:
+        logger.exception("/predict failed.")
+        raise HTTPException(status_code=500, detail="Prediction failed.")
 
 @app.post("/predict-file", response_model=dict, summary="Predict from uploaded file (PDF, TXT, HTML)")
 def predict_file(file: UploadFile = File(...)):
     """
-    This endpoint can extract text from file (PDF with OCR if needed, TXT, or HTML),
-    then run classification with chunking and fallback.
+    Endpoint for file classification with OCR + logging.
     """
     try:
+        logger.info(f"/predict-file request: filename={file.filename}")
         ext = os.path.splitext(file.filename)[1].lower()
         if ext == ".pdf":
             text = extract_text_from_pdf(file.file.read())
@@ -172,21 +227,25 @@ def predict_file(file: UploadFile = File(...)):
             soup = BeautifulSoup(html_content, "html.parser")
             text = soup.get_text(separator=" ", strip=True)
         else:
-            return JSONResponse(status_code=400, content={"error": f"Unsupported file type: {ext}"})
+            raise HTTPException(status_code=400, detail=f"Unsupported file type: {ext}")
 
         if not text.strip():
-            return JSONResponse(status_code=400, content={"error": "No extractable text found in file."})
+            raise HTTPException(status_code=400, detail="No extractable text found in file.")
 
-    except Exception as e:
-        return JSONResponse(status_code=400, content={"error": f"Failed to process file: {str(e)}"})
-
-    return run_prediction(text)
+        result = run_prediction(text)
+        logger.info(f"/predict-file response: predicted_type={result['predicted_type']}, confidence={result['confidence']:.2f}")
+        return result
+    except HTTPException:
+        raise
+    except Exception:
+        logger.exception("/predict-file failed.")
+        raise HTTPException(status_code=500, detail="Failed to process file.")
 
 @app.get("/model-info")
 def model_info():
     return {
         "labels": label_mappings,
-        "pipeline": "Full Pipeline (NLP + Features + Logistic Regression with fallback and OCR)"
+        "pipeline": "Full Pipeline (NLP + Features + Logistic Regression with fallback, OCR, explainability, logging)"
     }
 
 # --------- Custom OpenAPI ---------

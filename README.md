@@ -1,6 +1,10 @@
 
 # **Contract Type Classification using NLP**
 ---
+- **etl.ipynb** – Data ingestion, cleaning, and preprocessing pipeline for contract datasets.  
+
+- **contract_nlp.ipynb** – End-to-end NLP modeling, training, evaluation, and MLflow tracking for contract type classification.
+
 
 ## **1. Dataset Preparation**
 
@@ -98,7 +102,21 @@ Two variants tested:
   * LegalBERT provides richer semantic understanding but at the cost of **compute, memory, and lower minority-class performance**.
   * Using fallback strategies on TF-IDF mitigates class ambiguity while maintaining efficiency.
 
+---
 
+### Model(s) Used & Rationale
+
+* **Spark NLP Pretrained Embeddings** – Converts raw text into dense vector representations capturing semantic meaning of contracts.
+* **Logistic Regression (Spark MLlib)** – Lightweight, interpretable, and scalable classifier ideal for multi-class contract type prediction.
+* **Fallback Logic** – Ensures uncertain or ambiguous predictions are labeled as `na`, improving reliability on edge cases.
+
+**Rationale:**
+
+* Pretrained embeddings save time and improve accuracy without training from scratch.
+* Spark MLlib ensures the model scales with large datasets efficiently.
+* Combined, the pipeline provides a robust, end-to-end workflow from raw text to predicted contract type.
+
+---
 
 ## **3. Challenges & Solutions**
 
@@ -199,7 +217,17 @@ Why these struggle:
 **Summary:**
 TF-IDF + LR with fallback delivers **production-grade contract classification**, balancing **accuracy, efficiency, and minority-class handling**. LegalBERT embeddings promise deeper semantic understanding but require trade-offs in **compute and training time**. Both approaches are fully tracked, versioned, and deployable, offering robust solutions for automated contract analysis
 
+---
 
+## Why Spark + Spark NLP 
+
+* **Scalable & Big Data Ready** – Distributed processing of millions of documents via Apache Spark.
+* **End-to-End Pipeline** – Tokenization, embeddings, feature extraction, and classification in a single workflow.
+* **Pretrained Models & Embeddings** – Industrial-strength embeddings and pipelines for fast, robust NLP.
+* **Seamless ML Integration** – Directly feed Spark NLP outputs into Spark MLlib classifiers.
+* **Optimized for Long Documents** – Efficient handling of contracts and other lengthy legal texts.
+
+---
 
 ## References
 

@@ -131,8 +131,9 @@ curl -X POST http://127.0.0.1:8000/predict-file \
   -F 'file=@sample_data/sample_contract.pdf'
 ```
 
-**Example API Response**
+**Example API Response with Explainablity from Chunks**
 
+[text](extras/response_1757138818411.json)
 ```json
 {
   "predicted_type": "employment",
