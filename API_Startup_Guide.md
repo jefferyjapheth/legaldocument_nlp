@@ -169,7 +169,7 @@ curl -X POST http://127.0.0.1:8000/predict-file \
 }
 ```
 
-> **Tip:** The `na` label appears when the model is unsure, using your fallback logic.
+> **Tip:** The `na` label appears when the model is unsure, using the fallback logic.
 ---
 
 ## 9. Stop the Server
